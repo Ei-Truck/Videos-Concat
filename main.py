@@ -5,6 +5,7 @@ import os
 import uuid
 from datetime import datetime
 from moviepy import VideoFileClip, CompositeVideoClip
+from urllib.parse import urlparse
 
 app = FastAPI(
     title="API Concatenador de Vídeos",
@@ -36,12 +37,13 @@ async def concatenar_videos(videos: list[str]):
 
     try:
         for url in videos:
-            nome_arquivo = url.split("/")[-1]
-            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
-            s3.download_fileobj(AWS_BUCKET, nome_arquivo, temp_file)
-            temp_file.flush()
-            temp_file.close()
-            arquivos_temp.append(temp_file.name)
+            parsed = urlparse(url)
+            key_s3 = parsed.path.lstrip('/')
+            print(f"Key S3 detectada: {key_s3}")
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
+                s3.download_fileobj(AWS_BUCKET, key_s3, tmp_file)
+                arquivos_temp.append(tmp_file.name)
 
         tempo_atual = 0
         for caminho in arquivos_temp:
