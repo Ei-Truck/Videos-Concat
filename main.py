@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import boto3
 import tempfile
 import os
@@ -23,6 +24,21 @@ s3 = boto3.client(
     aws_access_key_id=AWS_ACCESS_KEY,
     aws_secret_access_key=AWS_SECRET_KEY,
     region_name=AWS_REGION
+)
+
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    # Se você tiver um domínio de produção, adicione-o aqui também
+    # "https://seudominiofrontend.com"
+]
+ 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,              # Lista de origens permitidas
+    allow_credentials=True,             # Permite cookies/credenciais
+    allow_methods=["*"],                # Permite todos os métodos (GET, POST, etc.)
+    allow_headers=["*"],                # Permite todos os cabeçalhos
 )
 
 @app.get("/")
