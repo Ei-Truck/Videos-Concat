@@ -3,3 +3,4 @@ uvicorn
 boto3
 moviepy
 python-multipart
+flake8
