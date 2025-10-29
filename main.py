@@ -99,14 +99,14 @@ async def concatenar_videos(id_motorista: int, videos: list[str]):
                 clip.reader.close()
                 if clip.audio:
                     clip.audio.reader.close_proc()
-            except:
-                pass
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=str(e))
 
         for caminho in arquivos_temp:
             try:
                 os.remove(caminho)
-            except:
-                pass
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=str(e))
 
         if output_path and os.path.exists(output_path):
             os.remove(output_path)
