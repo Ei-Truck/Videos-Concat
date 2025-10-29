@@ -46,7 +46,7 @@ async def root():
     return {"message": "API online!"}
 
 @app.post("/concatenar")
-async def concatenar_videos(videos: list[str]):
+async def concatenar_videos(id_motorista: int, videos: list[str]):
     arquivos_temp = []
     clips = []
     output_path = None
@@ -81,9 +81,11 @@ async def concatenar_videos(videos: list[str]):
         nome_saida = f"video_final_{timestamp}_{unique_id}.mp4"
 
         with open(output_path, "rb") as f:
-            s3.upload_fileobj(f, AWS_BUCKET, nome_saida)
+            caminho_s3 = f"concatenadas/{id_motorista}/{nome_saida}"
+            s3.upload_fileobj(f, AWS_BUCKET, caminho_s3)
 
-        url_final = f"https://{AWS_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{nome_saida}"
+
+        url_final = f"https://{AWS_BUCKET}.s3.{AWS_REGION}.amazonaws.com/concatenadas/{id_motorista}/{nome_saida}"
 
         return {"status": "ok", "video_final_url": url_final}
 
