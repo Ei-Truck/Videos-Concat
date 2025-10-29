@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 app = FastAPI(
     title="API Concatenador de Vídeos",
     description="Recebe URLs de vídeos da AWS S3, concatena e envia para o S3.",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID")
@@ -23,7 +23,7 @@ s3 = boto3.client(
     "s3",
     aws_access_key_id=AWS_ACCESS_KEY,
     aws_secret_access_key=AWS_SECRET_KEY,
-    region_name=AWS_REGION
+    region_name=AWS_REGION,
 )
 
 origins = [
@@ -32,18 +32,20 @@ origins = [
     # Se você tiver um domínio de produção, adicione-o aqui também
     # "https://seudominiofrontend.com"
 ]
- 
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,              # Lista de origens permitidas
-    allow_credentials=True,             # Permite cookies/credenciais
-    allow_methods=["*"],                # Permite todos os métodos (GET, POST, etc.)
-    allow_headers=["*"],                # Permite todos os cabeçalhos
+    allow_origins=origins,  # Lista de origens permitidas
+    allow_credentials=True,  # Permite cookies/credenciais
+    allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permite todos os cabeçalhos
 )
+
 
 @app.get("/")
 async def root():
     return {"message": "API online!"}
+
 
 @app.post("/concatenar")
 async def concatenar_videos(id_motorista: int, videos: list[str]):
@@ -54,7 +56,7 @@ async def concatenar_videos(id_motorista: int, videos: list[str]):
     try:
         for url in videos:
             parsed = urlparse(url)
-            key_s3 = parsed.path.lstrip('/')
+            key_s3 = parsed.path.lstrip("/")
             print(f"Key S3 detectada: {key_s3}")
 
             with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
@@ -83,7 +85,6 @@ async def concatenar_videos(id_motorista: int, videos: list[str]):
         with open(output_path, "rb") as f:
             caminho_s3 = f"concatenadas/{id_motorista}/{nome_saida}"
             s3.upload_fileobj(f, AWS_BUCKET, caminho_s3)
-
 
         url_final = f"https://{AWS_BUCKET}.s3.{AWS_REGION}.amazonaws.com/concatenadas/{id_motorista}/{nome_saida}"
 
