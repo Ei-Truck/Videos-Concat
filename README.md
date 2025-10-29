@@ -1,7 +1,6 @@
 # 🎬 API Concatenadora de Vídeos
 
 Esta API permite **baixar vídeos diretamente de URLs do Amazon S3**, **concatená-los na ordem enviada** e **enviar o resultado novamente para um bucket S3**.  
-Ideal para pipelines de edição automatizada, sistemas de reels / shorts, ou processamento de mídia em lote.
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -74,6 +73,6 @@ S3_BUCKET_NAME=nome-do-seu-bucket
 
 **A ordem dos vídeos no array `urls` define a ordem da concatenação.**
 
-**Certifique-se de que os vídeos têm formatos compatíveis (ex: mp4) e codecs iguais para evitar erros.**
+**Certifique-se de que os vídeos têm formatos compatíveis `(ex: mp4)` e codecs iguais para evitar erros.
 
 **Para arquivos muito grandes, recomenda-se otimizar o processamento ou aumentar os recursos do container.**
