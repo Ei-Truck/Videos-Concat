@@ -29,6 +29,7 @@ s3 = boto3.client(
 origins = [
     "http://localhost",
     "http://localhost:8080",
+    "http://localhost:3000"
     # Se você tiver um domínio de produção, adicione-o aqui também
     # "https://seudominiofrontend.com"
 ]
