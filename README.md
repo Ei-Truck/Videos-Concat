@@ -41,11 +41,10 @@ http://localhost:8000/docs
 **Exemplo de request**
 ```json
 {
-  "urls": [
+  [
     "https://bucket.s3.amazonaws.com/video1.mp4",
     "https://bucket.s3.amazonaws.com/video2.mp4"
-  ],
-  "output_key": "resultado/video_final.mp4"
+  ]
 }
 ```
 
